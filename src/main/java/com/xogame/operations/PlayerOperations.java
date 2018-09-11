@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.xogame.model.Player;
+import com.xogame.model.PlayerState.PLAYER_RESULT_STATE;
 import com.xogame.model.PlayerState.PLAYER_STATE;
 
 /**
@@ -97,10 +98,21 @@ public class PlayerOperations {
 		player.getPlayerState().setPlayerState(state);
 	}
 
+	/**
+	 * set player state result of player {@link PLAYER_RESULT_STATE}
+	 * 
+	 * @param player Set player to set player result state ...
+	 * @param state  Set specific state to change it, that you want.
+	 **/
 	public void setPlayerStateResult(Player player, String state) {
 		player.getPlayerState().setPlayerResultState(state);
 	}
 
+	/**
+	 * get player state result of player {@link PLAYER_RESULT_STATE}
+	 * 
+	 * @param player Get player of final result state ...
+	 **/
 	public String getPlayerStateResult(Player player) {
 		return player.getPlayerState().getPlayerResultState();
 	}

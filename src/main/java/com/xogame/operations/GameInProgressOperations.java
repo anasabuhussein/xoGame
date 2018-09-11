@@ -26,7 +26,6 @@ import com.xogame.strategy_xo_game.GameStrategy;
 public class GameInProgressOperations implements GameSettingDao {
 
 	private IniteGame initeGame;
-	private PlayerOperations playerOperations;
 
 	public GameInProgressOperations() {
 		super();

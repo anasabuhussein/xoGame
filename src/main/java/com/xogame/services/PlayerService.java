@@ -1,6 +1,7 @@
 package com.xogame.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +9,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
 
 import com.xogame.dao.GeneralOperations;
+import com.xogame.dao.PlayerDao;
 import com.xogame.model.Player;
-import com.xogame.repositry.PlayerRepositry;
+import com.xogame.model.PlayerState;
+import com.xogame.repositry.FacadeRepositry;
 
 @Service
-public class PlayerService implements CommandLineRunner, GeneralOperations<Player> {
+public class PlayerService implements CommandLineRunner, GeneralOperations<Player>, PlayerDao {
 
 	@Autowired
-	private PlayerRepositry pr;
+	private FacadeRepositry facadeRepositry;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -38,42 +41,67 @@ public class PlayerService implements CommandLineRunner, GeneralOperations<Playe
 
 	public PlayerService() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public Player save(Player t) {
-
-		return pr.save(t);
+		return facadeRepositry.getPlayerRepositry().save(t);
 	}
 
 	@Override
-	public Player update(UUID id, Player t) {
-		// TODO Auto-generated method stub
-		return null;
+	public Player update(UUID id, Player _player) {
+		Player player = findById(id);
+
+		if (_player.getEmail() != null)
+			player.setEmail(player.getEmail());
+
+		if (_player.getPic() != null)
+			player.setPic(_player.getPic());
+
+		if (_player.getPass() != null)
+			player.setPass(player.getPass());
+
+		return save(player);
 	}
 
 	@Override
 	public void delete(Player t) {
-		// TODO Auto-generated method stub
-
+		facadeRepositry.getPlayerRepositry().delete(t);
 	}
 
 	@Override
 	public void delete(UUID id) {
-		// TODO Auto-generated method stub
-
+		Player player = findById(id);
+		facadeRepositry.getPlayerRepositry().delete(player);
 	}
 
 	@Override
 	public Player findById(UUID id) {
-		// TODO Auto-generated method stub
+		Optional<Player> player = facadeRepositry.getPlayerRepositry().findById(id);
+		if (player.isPresent())
+			return player.get();
 		return null;
 	}
 
 	@Override
 	public List<Player> findAll() {
-		return pr.findAll();
+		return facadeRepositry.getPlayerRepositry().findAll();
+	}
+
+	@Override
+	public List<Player> getFrinds(UUID id) {
+		if (findById(id).getFriends() != null)
+			return findById(id).getFriends();
+
+		return null;
+	}
+
+	@Override
+	public PlayerState getPlayerState(UUID id) {
+		if (findById(id).getPlayerState() != null)
+			return findById(id).getPlayerState();
+
+		return null;
 	}
 
 }
