@@ -9,11 +9,11 @@ This project provide xo game service with our friends :)
 2. /players
 
 ### PIC of API
-1. ![Players](https://imgur.com/fayn7yd)
+1. ![Players](https://imgur.com/fayn7yd.png)
 
-2. ![Post Game](https://imgur.com/uFGb04S)
+2. ![Post Game](https://imgur.com/uFGb04S.png)
 
-2. ![Put Game](https://imgur.com/M3uqFYo)
+2. ![Put Game](https://imgur.com/M3uqFYo.png)
 
 
 >Visit ling to see the [images api](https://imgur.com/a/CwNRNHd)
