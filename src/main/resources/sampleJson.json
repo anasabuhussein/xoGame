@@ -1,0 +1,34 @@
+ {
+ 	"gameSetting": {
+ 		"gameName": "first",
+ 		"gamePass": 500,
+ 		"players": [{
+ 			"playerState": null,
+ 			"online": false,
+ 			"busy": false,
+ 			"id": "4f4c26b7-b301-11e8-b81a-0b5a893b3028",
+ 			"name": "anas",
+ 			"email": "anas@me.com",
+ 			"pass": "159954",
+ 			"pic": "pic.png",
+ 			"numberOfWin": 0,
+ 			"numberOfLose": 0,
+ 			"balance": 0,
+ 			"friends": []
+ 		},{
+ 			
+                "busy": false,
+                "online": false,
+                "id": "4f4c26b9-b301-11e8-b81a-0db3db56ec2f",
+                "name": "hussein",
+                "email": "anas@me.com",
+                "pass": "159954",
+                "pic": "pic.png",
+                "numberOfWin": 0,
+                "numberOfLose": 0,
+                "balance": 0,
+                "friends": []
+            }
+ 		]
+ 	}
+ }
