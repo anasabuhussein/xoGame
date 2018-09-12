@@ -1,7 +1,13 @@
 # xoGame
 This project provide xo game service with our friends :)
 
-### Note : the work under progress...
+### Description
+
+This project provide to players to play with each other; the project set role for players if player has role playing will make movements and if player has waitting role will block player.
+
+The project shall related with android applications :).
+
+### Note : the project under progress...
 
 ### Endpoints 
 1. /games
