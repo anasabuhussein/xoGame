@@ -1,4 +1,4 @@
-package com.xogame.dao;
+package com.xogame.operations.game_setting;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import com.xogame.model.GameSetting;
 import com.xogame.model.Player;
 import com.xogame.model.PlayerState;
 
-public interface GameSettingDao {
+public interface GameSettingStrategyOperationsInterface {
 
 	public void setGameName(String name);
 

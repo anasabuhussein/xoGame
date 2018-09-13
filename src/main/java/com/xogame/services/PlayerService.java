@@ -104,4 +104,34 @@ public class PlayerService implements CommandLineRunner, GeneralOperations<Playe
 		return null;
 	}
 
+	@Override
+	public int getBalanceOfPlayer(Player player) {
+		return player.getBalance();
+	}
+
+	@Override
+	public int getWinningOfPlayer(Player player) {
+		return player.getNumbersOfWin();
+	}
+
+	@Override
+	public int getLosesOfPlayer(Player player) {
+		return player.getNumbersOfLose();
+	}
+
+	@Override
+	public void setPlayerWin(Player player) {
+		player.setBalance(getBalanceOfPlayer(player) + 1);
+	}
+
+	@Override
+	public void setPlayerLose(Player player) {
+		player.setNumbersOfLose(getLosesOfPlayer(player) + 1);
+	}
+
+	@Override
+	public void setPlayerBalance(Player player) {
+		player.setNumbersOfWin(getWinningOfPlayer(player) + 1);
+	}
+
 }

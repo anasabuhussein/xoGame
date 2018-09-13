@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xogame.model.IniteGame;
+import com.xogame.operations.game.GameOperations;
 import com.xogame.services.FacadeServices;
 
 /**
@@ -31,6 +33,9 @@ public class GamePath {
 	@Autowired
 	private FacadeServices facadeServices;
 
+	@Autowired
+	private GameOperations gameOperations;
+
 	@GetMapping(value = ("/players"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<?> findAllPlayers() {
@@ -43,7 +48,7 @@ public class GamePath {
 		return new ResponseEntity<>(facadeServices.getGameService().findAll(), HttpStatus.OK);
 	}
 
-	@GetMapping(value = ("//games/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+	@GetMapping(value = ("/games/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<?> findAGameById(@PathVariable(value = "id") UUID id) {
 		return new ResponseEntity<>(facadeServices.getGameService().findById(id), HttpStatus.OK);
@@ -66,10 +71,21 @@ public class GamePath {
 			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<?> updateGames(@PathVariable(value = "id") UUID id, @RequestBody IniteGame initeGame) {
-		
-		LOGGER.info("test test ....................");
-		
-//		IniteGame dbGame = facadeServices.getGameService().findById(id);
+
 		return new ResponseEntity<>(facadeServices.getGameService().update(id, initeGame), HttpStatus.OK);
 	}
+
+	@SuppressWarnings("null")
+	@PutMapping(value = ("/games/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+					MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<?> restartGame(@PathVariable(value = "id") UUID id, @RequestBody IniteGame initeGame,
+			@RequestParam(value = "restart", required = true) String restart) {
+
+		if (restart != null || !restart.equals(null))
+			gameOperations.gameEnd(restart, initeGame);
+
+		return new ResponseEntity<>(facadeServices.getGameService().update(id, initeGame), HttpStatus.OK);
+	}
+
 }

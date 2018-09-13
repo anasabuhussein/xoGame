@@ -1,4 +1,4 @@
-package com.xogame.operations;
+package com.xogame.operations.game_setting;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.xogame.dao.GameSettingDao;
 import com.xogame.model.GameSetting;
 import com.xogame.model.IniteGame;
 import com.xogame.model.Player;
@@ -15,23 +14,22 @@ import com.xogame.strategy_xo_game.GameStrategy;
 
 /**
  * 
- * This class it is represent the operation must perform to acces to data. and
- * make blueprint.
+ * This class to short cut usage of initGame Object 
  * 
  * @author Anas Abu-Hussein
  * 
  * @since 7/9/2018
  **/
 
-public class GameInProgressOperations implements GameSettingDao {
+public class GameSettingStrategyImp implements GameSettingStrategyOperationsInterface {
 
 	private IniteGame initeGame;
 
-	public GameInProgressOperations() {
+	public GameSettingStrategyImp() {
 		super();
 	}
 
-	public GameInProgressOperations(IniteGame initeGame) {
+	public GameSettingStrategyImp(IniteGame initeGame) {
 		super();
 		this.initeGame = initeGame;
 	}

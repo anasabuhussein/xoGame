@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 import com.xogame.dao.GeneralOperations;
 import com.xogame.dao.InitGameDao;
 import com.xogame.model.GameSetting.GAME_STATE;
+import com.xogame.operations.game.GameOperations;
 import com.xogame.model.IniteGame;
-import com.xogame.operations.GameOperations;
 import com.xogame.repositry.FacadeRepositry;
 
 @Service
@@ -51,19 +51,19 @@ public class GameService implements CommandLineRunner, InitGameDao, GeneralOpera
 
 		IniteGame dbGame = findById(id);
 
-		gameOperations.gameInProgress(dbGame, t);
+		dbGame = gameOperations.gameInProgress(dbGame, t);
 
 		return save(dbGame);
 	}
 
 	@Override
 	public void delete(IniteGame t) {
-
+		facadeRepositry.getGameRepositry().delete(t);
 	}
 
 	@Override
 	public void delete(UUID id) {
-
+		facadeRepositry.getGameRepositry().deleteById(id);
 	}
 
 	@Override

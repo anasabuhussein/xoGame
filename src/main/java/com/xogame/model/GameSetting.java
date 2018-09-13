@@ -52,6 +52,9 @@ public class GameSetting {
 
 		if (gameState.equals(GAME_STATE.IN_PROGRESS.name()))
 			this.gameState = GAME_STATE.END.name();
+
+		if (gameState.equals(GAME_STATE.END.name()))
+			this.gameState = GAME_STATE.WATTING.name();
 	}
 
 	public List<Player> getPlayers() {

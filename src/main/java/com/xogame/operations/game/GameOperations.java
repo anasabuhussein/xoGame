@@ -1,9 +1,7 @@
-package com.xogame.operations;
+package com.xogame.operations.game;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,30 +13,33 @@ import com.xogame.model.Player;
 import com.xogame.model.PlayerState;
 import com.xogame.model.PlayerState.PLAYER_RESULT_STATE;
 import com.xogame.model.PlayerState.PLAYER_STATE;
-import com.xogame.repositry.FacadeRepositry;
+import com.xogame.operations.game_setting.GameSettingStrategyImp;
 import com.xogame.strategy_xo_game.GameStrategy;
 
 /**
- * @author anasa
+ * This class represent the operations on the game such as <br>
+ * change state of game {@link GAME_STATE}, <br>
+ * and change {@link PLAYER_STATE}, <br>
+ * and set the chars of players and set {@link PLAYER_RESULT_STATE} when one
+ * player is win or in balance
+ * 
+ * @author Anas Abu-Hussein
+ * @since 11/9/2018
  *
- */
-/**
- * @author anasa
- *
- */
+ **/
 @Component
 public class GameOperations implements GameSteps {
 
 	private static final Logger LOGGER = Logger.getLogger(GameOperations.class);
 
-	@Autowired
-	private FacadeRepositry facadeRepositry;
-
-	@Autowired
+	@Autowired // to set new operations for each players and choose random chars
 	private PlayerOperations playerOperations;
 
-	private GameInProgressOperations db_progress;
-	private GameInProgressOperations request_progress;
+	// to shortcut methode of initGame class. for coming initGame from DB.
+	private GameSettingStrategyImp db_progress;
+
+	// to shortcut methode of initGame class. for coming initGame from request.
+	private GameSettingStrategyImp request_progress;
 
 	public GameOperations() {
 		super();
@@ -74,8 +75,9 @@ public class GameOperations implements GameSteps {
 		// init game and players and change players and game state
 		IniteGame initeGame = null;
 
-		if (!dbGame.getGameSetting().getGameState().equals(GAME_STATE.IN_PROGRESS.name())) {
-			initeGame = this.initProgressGame_PlayersAndChangeGameState(dbGame, comeGame);
+		if (!dbGame.getGameSetting().getGameState().equals(GAME_STATE.IN_PROGRESS.name())
+				&& !dbGame.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
+			initeGame = initProgressGame_PlayersAndChangeGameState(dbGame, comeGame);
 		}
 
 		if (dbGame.getGameSetting().getGameState().equals(GAME_STATE.IN_PROGRESS.name())) {
@@ -88,40 +90,22 @@ public class GameOperations implements GameSteps {
 	}
 
 	@Override
-	public void gameEnd() {
+	public void gameEnd(String restartGame, IniteGame db_initGame) {
+		if ((restartGame != null && restartGame == "restart")
+				|| db_initGame.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
 
-	}
+			// set array to defaults array ...
+			db_initGame.getGameStrategy().defaultArray();
 
-	public boolean checkPlayersExist(List<Player> players) {
-		// check if player exist in database or not before play.
-		boolean check = false;
+			// set in progress to all
+			playerOperations.setPlayerStateResultForAll(db_initGame.getGameSetting().getPlayers(),
+					PLAYER_RESULT_STATE.IN_PROGRESS.name());
 
-		// loop on all players in database .
-		for (int i = 0; i < players.size(); i++) {
-			Player player = players.get(i);
+			// set game state to in prgress ...
+			db_initGame.getGameSetting().setGameState(db_initGame.getGameSetting().getGameState());
 
-			// check if player is null or not
-			if (findPlayer(player.getId()) != null) {
-				check = true;
-			} else {
-				check = false;
-			}
 		}
-		return check;
-	}
 
-	/**
-	 * @param id
-	 * @return
-	 */
-	public Player findPlayer(UUID id) {
-
-		// find player by set id from data base
-		Optional<Player> player = facadeRepositry.getPlayerRepositry().findById(id);
-		// if player relate with data base and has uniqe id.
-		if (player.isPresent())
-			return player.get();
-		return null;
 	}
 
 	// change game state to progress ...
@@ -140,12 +124,12 @@ public class GameOperations implements GameSteps {
 
 		try {
 
-			db_progress = new GameInProgressOperations(dbGame);
-			request_progress = new GameInProgressOperations(comeGame);
+			db_progress = new GameSettingStrategyImp(dbGame);
+			request_progress = new GameSettingStrategyImp(comeGame);
 
 			if (db_progress.getPlayerSize() < 2) {
 
-				if (checkPlayersExist(request_progress.getPlayers())) {
+				if (playerOperations.checkPlayersExist(request_progress.getPlayers())) {
 					// set new players ... if size in data base < 2
 					// change sate of game from wating to start ...
 					db_progress.setPlayers(request_progress.getPlayers());
@@ -182,7 +166,8 @@ public class GameOperations implements GameSteps {
 				changeGameStateFromStartToProgress();
 			}
 
-			return facadeRepositry.getGameRepositry().save(dbGame);
+//			return facadeRepositry.getGameRepositry().save(dbGame);
+			return db_progress.getIniteGame();
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -218,8 +203,8 @@ public class GameOperations implements GameSteps {
 
 		try {
 
-			db_progress = new GameInProgressOperations(dbGame);
-			request_progress = new GameInProgressOperations(comeGame);
+			db_progress = new GameSettingStrategyImp(dbGame);
+			request_progress = new GameSettingStrategyImp(comeGame);
 
 			// player 0 playing
 			Player player0 = db_progress.getPlayers().get(0);
@@ -248,12 +233,13 @@ public class GameOperations implements GameSteps {
 			}
 
 			// set player result state loser To other player ...
-			setFinalResult(player0, player1);
+			setFinalResult(db_progress.getPlayers());
 
 			// check the array has d => defaults chars.
-			checkPathAndsetFinalResult(player0, player1);
+			checkPathAndsetFinalResult(db_progress.getPlayers(), db_progress);
 
-			return facadeRepositry.getGameRepositry().save(dbGame);
+//			return facadeRepositry.getGameRepositry().save(dbGame);
+			return db_progress.getIniteGame();
 
 		} catch (Exception e) {
 			LOGGER.info(e.getMessage());
@@ -286,19 +272,19 @@ public class GameOperations implements GameSteps {
 	 * Check the final result of players and set another player state to loser
 	 * state.
 	 * 
-	 * @param player0
-	 * @param player1
+	 * @param players
 	 */
-	public void setFinalResult(Player player0, Player player1) {
+	public void setFinalResult(List<Player> players) {
 
-		// if player 0 is winner set player1 is loser
-		if (player0.getPlayerState().getPlayerResultState().equals(PLAYER_RESULT_STATE.WINNER.name()))
-			player1.getPlayerState().setPlayerResultState(PLAYER_RESULT_STATE.LOSER.name());
+		if (playerOperations.checkPlayersIsWinners(players)) {
 
-		// if player 1 is winner set player0 is loser
-		if (player1.getPlayerState().getPlayerResultState().equals(PLAYER_RESULT_STATE.WINNER.name()))
-			player0.getPlayerState().setPlayerResultState(PLAYER_RESULT_STATE.LOSER.name());
+			// set the un winner player to loser result state ...
+			playerOperations.detectWinnerPlayersToSetLoserPlayers(players);
 
+			// change game state ...
+			db_progress.setGameState(db_progress.getGameState());
+
+		}
 	}
 
 	/**
@@ -306,24 +292,26 @@ public class GameOperations implements GameSteps {
 	 * If array not contains d char and the player final state is IN_PROGRESS // so
 	 * set the result final state of player to balance...
 	 * 
-	 * @param player0
-	 * @param player1
-	 * 
+	 * @param players
+	 * @param gameSetting
 	 * @see Player
 	 */
-	public void checkPathAndsetFinalResult(Player player0, Player player1) {
+	public void checkPathAndsetFinalResult(List<Player> players, GameSettingStrategyImp gameSetting) {
 
-		if (!player0.getPlayerState().getPlayerResultState().equals(PLAYER_RESULT_STATE.WINNER.name())
-				|| !player1.getPlayerState().getPlayerResultState().equals(PLAYER_RESULT_STATE.WINNER.name())) {
+		if (playerOperations.checkPlayersIsWinners(players) == false) {
 
 			if (!db_progress.getGameStrategy().checkHasDefault_d()) {
 
-				player0.getPlayerState().setPlayerResultState(PLAYER_RESULT_STATE.BALANCE.name());
-				player1.getPlayerState().setPlayerResultState(PLAYER_RESULT_STATE.BALANCE.name());
+				playerOperations.setPlayerStateResultForAll(players, PLAYER_RESULT_STATE.BALANCE.name());
+
+				// update player result.
+				playerOperations.updateStatePlayerNumberForAll(players);
+
+				// change game state ...
+				db_progress.setGameState(db_progress.getGameState());
 
 			} else if (db_progress.getGameStrategy().checkHasDefault_d()) {
-				player0.getPlayerState().setPlayerResultState(PLAYER_RESULT_STATE.IN_PROGRESS.name());
-				player1.getPlayerState().setPlayerResultState(PLAYER_RESULT_STATE.IN_PROGRESS.name());
+				playerOperations.setPlayerStateResultForAll(players, PLAYER_RESULT_STATE.IN_PROGRESS.name());
 			}
 
 		}
