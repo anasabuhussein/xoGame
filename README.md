@@ -5,9 +5,9 @@ This project provide xo game service with our friends :)
 
 This project provide to players to play with each other; the project set role for players if player has role playing will make movements and if player has waitting role will block player.
 
-The project shall related with android applications :).
+>The project shall related with android applications :).
 
-### the project have sampl of data; you will found it in resources folder > sampleData > ...
+>the project have sampl of data; you will found it in resources folder > sampleData > ...
 
 ### Endpoints 
 1. /games
