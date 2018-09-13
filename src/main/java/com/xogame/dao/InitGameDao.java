@@ -3,7 +3,15 @@ package com.xogame.dao;
 import java.util.List;
 
 import com.xogame.model.IniteGame;
-import com.xogame.strategy_xo_game.GameStrategy;
+
+/**
+ * This class for increase the operations that gets data from database for
+ * {@link IniteGame}.
+ * 
+ * @author Anas Abu-Hussein
+ * @since 11/9/2018
+ *
+ **/
 
 public interface InitGameDao extends GeneralOperations<IniteGame> {
 

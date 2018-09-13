@@ -6,6 +6,13 @@ import java.util.UUID;
 import com.xogame.model.Player;
 import com.xogame.model.PlayerState;
 
+/**
+ * This class for increase the operations that gets data from database for player.
+ * 
+ * @author Anas Abu-Hussein
+ * @since 11/9/2018
+ *
+ **/
 public interface PlayerDao extends GeneralOperations<Player> {
 
 	public List<Player> getFrinds(UUID ID);

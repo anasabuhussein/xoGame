@@ -151,7 +151,6 @@ public class GameOperations implements GameSteps {
 			// change state of game from waitting to start ...
 			if (db_progress.getPlayerSize() >= 2)
 				changeGameStateFromStartToProgress();
-//				db_progress.setGameState(db_progress.getGameState());
 
 			if (db_progress.getPlayerSize() >= 2) {
 
@@ -175,7 +174,6 @@ public class GameOperations implements GameSteps {
 				changeGameStateFromStartToProgress();
 			}
 
-//			return facadeRepositry.getGameRepositry().save(dbGame);
 			return gameService.save(db_progress.getIniteGame());
 
 		} catch (Exception e) {
@@ -248,7 +246,6 @@ public class GameOperations implements GameSteps {
 			// check the array has d => defaults chars.
 			checkPathAndsetFinalResult(db_progress.getPlayers(), db_progress);
 
-//			return facadeRepositry.getGameRepositry().save(dbGame);
 			return gameService.save(db_progress.getIniteGame());
 
 		} catch (Exception e) {

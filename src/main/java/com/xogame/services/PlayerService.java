@@ -22,21 +22,7 @@ public class PlayerService implements CommandLineRunner, GeneralOperations<Playe
 
 	@Override
 	public void run(String... args) throws Exception {
-		Player player0 = new Player("anas", "anas@me.com", "159954", "pic.png", 0, 0, 0, null, null);
-
-		Player player1 = new Player("bassam", "anas@me.com", "159954", "pic.png", 0, 0, 0, null, null);
-
-		Player player2 = new Player("hussein", "anas@me.com", "159954", "pic.png", 0, 0, 0, null, null);
-
-		Player player3 = new Player("youness", "anas@me.com", "159954", "pic.png", 0, 0, 0, null, null);
-
-		Player player4 = new Player("maha", "anas@me.com", "159954", "pic.png", 0, 0, 0, null, null);
-
-//		this.save(player0);
-//		this.save(player1);
-//		this.save(player2);
-//		this.save(player3);
-//		this.save(player4);
+		//
 	}
 
 	public PlayerService() {

@@ -22,9 +22,12 @@ import com.xogame.operations.game_setting.GameSettingStrategyImp;
 import com.xogame.services.FacadeServices;
 
 /**
+ * RestController to get end points of game; and gets data of game.
  * 
- * we have two type of game -> 1. already exist game in database and wait
- * players. 2. the player request friends to play with theme.
+ * @author Anas Abu-Hussein
+ * @since 11/9/2018
+ * @see IniteGame
+ *
  **/
 
 @RestController
@@ -38,27 +41,25 @@ public class GamePath {
 	@Autowired
 	private GameOperations gameOperations;
 
-	@GetMapping(value = ("/players"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-			MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<?> findAllPlayers() {
-		return new ResponseEntity<>(facadeServices.getPlayerService().findAll(), HttpStatus.OK);
-	}
-
 	@GetMapping(value = ("/games"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<?> findAllGames() {
+		LOGGER.info("Get Games");
 		return new ResponseEntity<>(facadeServices.getGameService().findAll(), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ("/games/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<?> findAGameById(@PathVariable(value = "id") UUID id) {
+
+		LOGGER.info("Get Games By ID : " + id);
 		return new ResponseEntity<>(facadeServices.getGameService().findById(id), HttpStatus.OK);
 	}
 
 	@GetMapping(value = ("/games/waiting"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 			MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<?> findWaitingGameById() {
+		LOGGER.info("Get Game with Waiting state ");
 		return new ResponseEntity<>(facadeServices.getGameService().waitStateGame(), HttpStatus.OK);
 	}
 
@@ -67,20 +68,13 @@ public class GamePath {
 					MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<?> addGames(@RequestBody IniteGame game) {
 
+		LOGGER.info("Post Method new game");
+
 		// set game first time ...
 		gameOperations.gameStart(game);
 
 		return new ResponseEntity<>(facadeServices.getGameService().save(game), HttpStatus.OK);
 	}
-
-//	@PutMapping(value = ("/games/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-//			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-//					MediaType.APPLICATION_XML_VALUE })
-//	public ResponseEntity<?> updateGames(@PathVariable(value = "id") UUID id, @RequestBody IniteGame initeGame) {
-//
-//		
-//		return new ResponseEntity<>(facadeServices.getGameService().update(id, initeGame), HttpStatus.OK);
-//	}
 
 	@PutMapping(value = ("/games/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
@@ -88,27 +82,42 @@ public class GamePath {
 	public ResponseEntity<?> restartGame(@PathVariable(value = "id") UUID id, @RequestBody IniteGame initeGame,
 			@RequestParam(value = "restart", required = false) String restart) {
 
+		LOGGER.info("Put Method wit exist game has id : " + id);
+
 		IniteGame dbGame = facadeServices.getGameService().findById(id);
 		GameSettingStrategyImp gameSettingStrategyImp = new GameSettingStrategyImp(dbGame);
 
 		// start
 		if (gameSettingStrategyImp.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
+
+			LOGGER.info("Put Game with start state");
+
 			gameOperations.gameStart(dbGame);
 		}
 
 		// change state from waiting to start
 		if (restart == null && gameSettingStrategyImp.getGameState().equals(GAME_STATE.WATTING.name())) {
+
+			LOGGER.info("Put Game with waiting state ");
+
 			gameSettingStrategyImp.setGameState(gameSettingStrategyImp.getGameState());
 		}
 
 		// in progress
 		if (restart == null && gameSettingStrategyImp.getGameState().equals(GAME_STATE.START.name())) {
+
+			LOGGER.info("Put Game with start ");
+
 			gameSettingStrategyImp.setIniteGame(gameOperations.gameInProgress(dbGame, initeGame));
 		}
 
 		// end
-		if (restart != null && gameSettingStrategyImp.getGameState().equals(GAME_STATE.END.name()))
+		if (restart != null && gameSettingStrategyImp.getGameState().equals(GAME_STATE.END.name())) {
+
+			LOGGER.info("Put Game with end state and not null restart ... ");
+
 			gameOperations.gameEnd(restart, dbGame);
+		}
 
 		return new ResponseEntity<>(facadeServices.getGameService().update(gameSettingStrategyImp.getIniteGame()),
 				HttpStatus.OK);

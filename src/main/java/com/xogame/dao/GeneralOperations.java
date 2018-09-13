@@ -3,6 +3,14 @@ package com.xogame.dao;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This class general operations that gets data from database for general
+ * object.
+ * 
+ * @author Anas Abu-Hussein
+ * @since 11/9/2018
+ *
+ **/
 public interface GeneralOperations<T> {
 
 	public T save(T t);

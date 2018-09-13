@@ -1,0 +1,73 @@
+{
+    "id": "86ccd910-b590-11e8-9298-1dee98bc6035",
+    "gameSetting": {
+        "gameName": "first",
+        "gamePass": "500",
+        "gameState": "WATTING",
+        "players": [
+            {
+                "playerState": {
+                    "playerChars": "x",
+                    "playerResultState": "IN_PROGRESS",
+                    "playerState": "WAITTING"
+                },
+                "busy": false,
+                "online": false,
+                "id": "4f4c26b7-b301-11e8-b81a-0b5a893b3028",
+                "name": "anas",
+                "email": "anas@me.com",
+                "pass": "159954",
+                "pic": "pic.png",
+                "numberOfWin": 125,
+                "numberOfLose": 0,
+                "balance": 1,
+                "friends": []
+            },
+            {
+                "playerState": {
+                    "playerChars": "o",
+                    "playerResultState": "IN_PROGRESS",
+                    "playerState": "READY"
+                },
+                "busy": false,
+                "online": false,
+                "id": "4f4c26b9-b301-11e8-b81a-0db3db56ec2f",
+                "name": "hussein",
+                "email": "anas@me.com",
+                "pass": "159954",
+                "pic": "pic.png",
+                "numberOfWin": 0,
+                "numberOfLose": 125,
+                "balance": 1,
+                "friends": []
+            }
+        ]
+    },
+    "gameStrategy": {
+        "playerState": {
+            "playerChars": "x",
+            "playerResultState": "WINNER",
+            "playerState": "WAITTING"
+        },
+        "patch": [
+            [
+                "d",
+                "d",
+                "d"
+            ],
+            [
+                "d",
+                "d",
+                "d"
+            ],
+            [
+                "d",
+                "d",
+                "d"
+            ]
+        ]
+    },
+    "links": [
+        "/games/86ccd910-b590-11e8-9298-1dee98bc6035"
+    ]
+}
