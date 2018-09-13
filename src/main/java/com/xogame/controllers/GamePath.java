@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xogame.model.IniteGame;
+import com.xogame.model.GameSetting.GAME_STATE;
 import com.xogame.operations.game.GameOperations;
+import com.xogame.operations.game_setting.GameSettingStrategyImp;
 import com.xogame.services.FacadeServices;
 
 /**
@@ -64,28 +66,53 @@ public class GamePath {
 			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<?> addGames(@RequestBody IniteGame game) {
+
+		// set game first time ...
+		gameOperations.gameStart(game);
+
 		return new ResponseEntity<>(facadeServices.getGameService().save(game), HttpStatus.OK);
 	}
 
-	@PutMapping(value = ("/games/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
-					MediaType.APPLICATION_XML_VALUE })
-	public ResponseEntity<?> updateGames(@PathVariable(value = "id") UUID id, @RequestBody IniteGame initeGame) {
+//	@PutMapping(value = ("/games/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+//			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+//					MediaType.APPLICATION_XML_VALUE })
+//	public ResponseEntity<?> updateGames(@PathVariable(value = "id") UUID id, @RequestBody IniteGame initeGame) {
+//
+//		
+//		return new ResponseEntity<>(facadeServices.getGameService().update(id, initeGame), HttpStatus.OK);
+//	}
 
-		return new ResponseEntity<>(facadeServices.getGameService().update(id, initeGame), HttpStatus.OK);
-	}
-
-	@SuppressWarnings("null")
 	@PutMapping(value = ("/games/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 					MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<?> restartGame(@PathVariable(value = "id") UUID id, @RequestBody IniteGame initeGame,
-			@RequestParam(value = "restart", required = true) String restart) {
+			@RequestParam(value = "restart", required = false) String restart) {
 
-		if (restart != null || !restart.equals(null))
-			gameOperations.gameEnd(restart, initeGame);
+		IniteGame dbGame = facadeServices.getGameService().findById(id);
+		GameSettingStrategyImp gameSettingStrategyImp = new GameSettingStrategyImp(dbGame);
 
-		return new ResponseEntity<>(facadeServices.getGameService().update(id, initeGame), HttpStatus.OK);
+		// start
+		if (gameSettingStrategyImp.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
+			gameOperations.gameStart(dbGame);
+		}
+
+		// change state from waiting to start
+		if (restart == null && gameSettingStrategyImp.getGameState().equals(GAME_STATE.WATTING.name())) {
+			gameSettingStrategyImp.setGameState(gameSettingStrategyImp.getGameState());
+		}
+
+		// in progress
+		if (restart == null && gameSettingStrategyImp.getGameState().equals(GAME_STATE.START.name())) {
+			gameSettingStrategyImp.setIniteGame(gameOperations.gameInProgress(dbGame, initeGame));
+		}
+
+		// end
+		if (restart != null && gameSettingStrategyImp.getGameState().equals(GAME_STATE.END.name()))
+			gameOperations.gameEnd(restart, dbGame);
+
+		return new ResponseEntity<>(facadeServices.getGameService().update(gameSettingStrategyImp.getIniteGame()),
+				HttpStatus.OK);
+
 	}
 
 }

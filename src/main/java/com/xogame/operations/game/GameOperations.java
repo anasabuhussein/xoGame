@@ -14,6 +14,7 @@ import com.xogame.model.PlayerState;
 import com.xogame.model.PlayerState.PLAYER_RESULT_STATE;
 import com.xogame.model.PlayerState.PLAYER_STATE;
 import com.xogame.operations.game_setting.GameSettingStrategyImp;
+import com.xogame.services.GameService;
 import com.xogame.strategy_xo_game.GameStrategy;
 
 /**
@@ -34,6 +35,9 @@ public class GameOperations implements GameSteps {
 
 	@Autowired // to set new operations for each players and choose random chars
 	private PlayerOperations playerOperations;
+
+	@Autowired
+	private GameService gameService;
 
 	// to shortcut methode of initGame class. for coming initGame from DB.
 	private GameSettingStrategyImp db_progress;
@@ -76,7 +80,7 @@ public class GameOperations implements GameSteps {
 		IniteGame initeGame = null;
 
 		if (!dbGame.getGameSetting().getGameState().equals(GAME_STATE.IN_PROGRESS.name())
-				&& !dbGame.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
+				| !dbGame.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
 			initeGame = initProgressGame_PlayersAndChangeGameState(dbGame, comeGame);
 		}
 
@@ -90,20 +94,24 @@ public class GameOperations implements GameSteps {
 	}
 
 	@Override
-	public void gameEnd(String restartGame, IniteGame db_initGame) {
+	public void gameEnd(String restartGame, IniteGame initGame) {
+
+		db_progress = new GameSettingStrategyImp(initGame);
+
 		if ((restartGame != null && restartGame == "restart")
-				|| db_initGame.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
+				|| initGame.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
 
 			// set array to defaults array ...
-			db_initGame.getGameStrategy().defaultArray();
+			db_progress.getGameStrategy().defaultArray();
 
 			// set in progress to all
-			playerOperations.setPlayerStateResultForAll(db_initGame.getGameSetting().getPlayers(),
+			playerOperations.setPlayerStateResultForAll(db_progress.getPlayers(),
 					PLAYER_RESULT_STATE.IN_PROGRESS.name());
 
 			// set game state to in prgress ...
-			db_initGame.getGameSetting().setGameState(db_initGame.getGameSetting().getGameState());
+			db_progress.getGameSetting().setGameState(db_progress.getGameState());
 
+			gameService.save(db_progress.getIniteGame());
 		}
 
 	}
@@ -142,7 +150,8 @@ public class GameOperations implements GameSteps {
 
 			// change state of game from waitting to start ...
 			if (db_progress.getPlayerSize() >= 2)
-				db_progress.setGameState(db_progress.getGameState());
+				changeGameStateFromStartToProgress();
+//				db_progress.setGameState(db_progress.getGameState());
 
 			if (db_progress.getPlayerSize() >= 2) {
 
@@ -167,7 +176,7 @@ public class GameOperations implements GameSteps {
 			}
 
 //			return facadeRepositry.getGameRepositry().save(dbGame);
-			return db_progress.getIniteGame();
+			return gameService.save(db_progress.getIniteGame());
 
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
@@ -233,13 +242,14 @@ public class GameOperations implements GameSteps {
 			}
 
 			// set player result state loser To other player ...
+			// set game state ..
 			setFinalResult(db_progress.getPlayers());
 
 			// check the array has d => defaults chars.
 			checkPathAndsetFinalResult(db_progress.getPlayers(), db_progress);
 
 //			return facadeRepositry.getGameRepositry().save(dbGame);
-			return db_progress.getIniteGame();
+			return gameService.save(db_progress.getIniteGame());
 
 		} catch (Exception e) {
 			LOGGER.info(e.getMessage());

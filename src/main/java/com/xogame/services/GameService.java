@@ -42,7 +42,6 @@ public class GameService implements CommandLineRunner, InitGameDao, GeneralOpera
 
 	@Override
 	public IniteGame save(IniteGame t) {
-		gameOperations.gameStart(t);
 		return facadeRepositry.getGameRepositry().save(t);
 	}
 
@@ -54,6 +53,10 @@ public class GameService implements CommandLineRunner, InitGameDao, GeneralOpera
 		dbGame = gameOperations.gameInProgress(dbGame, t);
 
 		return save(dbGame);
+	}
+
+	public IniteGame update(IniteGame game) {
+		return save(game);
 	}
 
 	@Override

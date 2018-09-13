@@ -33,8 +33,8 @@ public interface GameSteps {
 	 * 
 	 * @param restartGame this variable from request param when one player needs to
 	 *                    restart the game.
-	 * @param db_initGame change the setting of the game
+	 * @param initGame TODO
 	 */
-	public void gameEnd(String restartGame, IniteGame db_initGame);
+	public void gameEnd(String restartGame, IniteGame initGame);
 
 }
