@@ -2,6 +2,8 @@ package com.xogame.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.xogame.model.IniteGame;
 
 /**

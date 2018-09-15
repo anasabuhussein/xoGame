@@ -57,6 +57,7 @@ public class Player {
 
 	public Player() {
 		super();
+		this.id = Generators.timeBasedGenerator().generate();
 	}
 
 	public Player(String name, String email, String pass, String pic, int numbersOfWin, int numbersOfLose, int balance,

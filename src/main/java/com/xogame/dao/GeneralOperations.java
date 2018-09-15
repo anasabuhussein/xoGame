@@ -3,6 +3,8 @@ package com.xogame.dao;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Repository;
+
 /**
  * This class general operations that gets data from database for general
  * object.

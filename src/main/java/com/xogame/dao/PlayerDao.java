@@ -3,6 +3,8 @@ package com.xogame.dao;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Repository;
+
 import com.xogame.model.Player;
 import com.xogame.model.PlayerState;
 
@@ -13,6 +15,7 @@ import com.xogame.model.PlayerState;
  * @since 11/9/2018
  *
  **/
+
 public interface PlayerDao extends GeneralOperations<Player> {
 
 	public List<Player> getFrinds(UUID ID);

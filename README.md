@@ -10,9 +10,15 @@ This project provide to players to play with each other; the project set role fo
 >the project have sampl of data; you will found it in resources folder > sampleData > ...
 
 ### Endpoints 
-1. /games
+1. POST, GET, PUT, DELETE ---> /games
 
-2. /players
+2. PUT, DELETE ---> /games/{id}
+
+3. POST, GET ---> /players
+
+4. PUT, DELETE ---> /players/{id}
+
+5. PUT, GET ---> /players/{id}/image
 
 ### PIC of API
 1. ![Players](https://imgur.com/fayn7yd.png) general pic.
