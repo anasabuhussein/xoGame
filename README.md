@@ -9,6 +9,8 @@ This project provide to players to play with each other; the project set role fo
 
 >the project have sampl of data; you will found it in resources folder > sampleData > ...
 
+>add for each player folder has name like player id > this folder contain user files such as pic; you can show the example in   resources folder > file > id fo player (4f4c26b7-b301-11e8-b81a-0b5a893b3028 > pics).
+
 ### Endpoints 
 1. POST, GET, PUT, DELETE ---> /games
 
@@ -32,6 +34,12 @@ This project provide to players to play with each other; the project set role fo
 5. ![Put Game](https://imgur.com/BkhTIz9.png) when set restart game will set players to defaults...
 
 6. ![Put Game](https://imgur.com/2O8pX7O.png) changing state of players when one player win ... 
+
+7. ![Put image](https://imgur.com/585j1TE.png) changing state of players when one player win ... 
+
+8. ![Put image](https://imgur.com/2jaPJuV.png) changing state of players when one player win ...
+
+9. ![Put image](https://imgur.com/EyK951H.png) changing state of players when one player win ...  
 
 
 >Visit link to see the [images api](https://imgur.com/a/CwNRNHd)
