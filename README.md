@@ -5,9 +5,9 @@ This project provide xo game service with our friends :)
 
 This project provide to players to play with each other; the project set role for players if player has role playing will make movements and if player has waitting role will block player.
 
-The project shall related with android applications :).
+>The project shall related with android applications :).
 
-### Note : the project under progress...
+>the project have sampl of data; you will found it in resources folder > sampleData > ...
 
 ### Endpoints 
 1. /games
@@ -15,11 +15,18 @@ The project shall related with android applications :).
 2. /players
 
 ### PIC of API
-1. ![Players](https://imgur.com/fayn7yd.png)
+1. ![Players](https://imgur.com/fayn7yd.png) general pic.
 
-2. ![Post Game](https://imgur.com/uFGb04S.png)
+2. ![Post Game](https://imgur.com/uFGb04S.png) general pic.
 
-2. ![Put Game](https://imgur.com/M3uqFYo.png)
+3. ![Put Game](https://imgur.com/M3uqFYo.png) general pic.
+
+4. ![Put Game](https://imgur.com/I9alupI.png) general pic.
+
+5. ![Put Game](https://imgur.com/BkhTIz9.png) when set restart game will set players to defaults...
+
+6. ![Put Game](https://imgur.com/2O8pX7O.png) changing state of players when one player win ... 
 
 
->Visit ling to see the [images api](https://imgur.com/a/CwNRNHd)
+>Visit link to see the [images api](https://imgur.com/a/CwNRNHd)
+>Visit link to see the [images api](https://imgur.com/a/iaJB1xx)
