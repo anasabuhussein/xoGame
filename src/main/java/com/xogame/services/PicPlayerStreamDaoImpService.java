@@ -23,7 +23,7 @@ import com.xogame.model.Player;
 public class PicPlayerStreamDaoImpService implements PicPlayerStreamDao {
 
 	// static file path in project..
-	private static final String FILE_PATH = "E:\\java projects\\spring works\\spring projects\\XO_Game\\src\\main\\resources\\file";
+	private static final String FILE_PATH = "\\java projects\\spring works\\spring projects\\XO_Game\\src\\main\\resources\\file";
 
 	// logger of the project ..
 	private static final Logger LOGGER = Logger.getLogger(PicPlayerStreamDaoImpService.class);
