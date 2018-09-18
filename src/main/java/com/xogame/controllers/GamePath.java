@@ -96,7 +96,7 @@ public class GamePath {
 		}
 
 		// change state from waiting to start
-		if (restart == null && gameSettingStrategyImp.getGameState().equals(GAME_STATE.WATTING.name())) {
+		if (restart == null && (gameSettingStrategyImp.getGameState().equals(GAME_STATE.WATTING.name()))) {
 
 			LOGGER.info("Put Game with waiting state ");
 
@@ -104,7 +104,8 @@ public class GamePath {
 		}
 
 		// in progress
-		if (restart == null && gameSettingStrategyImp.getGameState().equals(GAME_STATE.START.name())) {
+		if (restart == null && (gameSettingStrategyImp.getGameState().equals(GAME_STATE.START.name())
+				|| gameSettingStrategyImp.getGameState().equals(GAME_STATE.IN_PROGRESS.name()))) {
 
 			LOGGER.info("Put Game with start ");
 

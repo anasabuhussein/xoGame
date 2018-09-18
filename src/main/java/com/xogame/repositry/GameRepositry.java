@@ -9,5 +9,4 @@ import com.xogame.model.IniteGame;
 
 @Repository
 public interface GameRepositry extends MongoRepository<IniteGame, UUID> {
-
 }

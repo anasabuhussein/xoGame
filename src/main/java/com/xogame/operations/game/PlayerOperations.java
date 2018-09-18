@@ -1,5 +1,6 @@
 package com.xogame.operations.game;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -293,4 +294,14 @@ public class PlayerOperations {
 			updatePlayerStateNumbers(player);
 		}
 	}
+
+	/**
+	 * Change the Player Who will start first in each game...
+	 * 
+	 * @param players List of players that will playes.
+	 */
+	public void reversPlayers(List<Player> players) {
+		Collections.reverse(players);
+	}
+
 }

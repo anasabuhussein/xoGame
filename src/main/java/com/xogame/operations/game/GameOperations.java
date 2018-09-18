@@ -80,7 +80,7 @@ public class GameOperations implements GameSteps {
 		IniteGame initeGame = null;
 
 		if (!dbGame.getGameSetting().getGameState().equals(GAME_STATE.IN_PROGRESS.name())
-				| !dbGame.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
+				&& !dbGame.getGameSetting().getGameState().equals(GAME_STATE.END.name())) {
 			initeGame = initProgressGame_PlayersAndChangeGameState(dbGame, comeGame);
 		}
 
@@ -160,6 +160,9 @@ public class GameOperations implements GameSteps {
 
 				// init players by set chars
 				intiPlayersChar(player0, player1);
+
+				// change the players who must start
+				playerOperations.reversPlayers(db_progress.getPlayers());
 
 				LOGGER.info("Player0 char is : " + player0.getPlayerState().getPlayerChars());
 				LOGGER.info("Player1 char is : " + player1.getPlayerState().getPlayerChars());
