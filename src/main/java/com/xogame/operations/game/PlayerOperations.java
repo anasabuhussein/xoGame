@@ -301,7 +301,16 @@ public class PlayerOperations {
 	 * @param players List of players that will playes.
 	 */
 	public void reversPlayers(List<Player> players) {
-		Collections.reverse(players);
+//		Collections.reverse(players);
+
+		int zero = 0; // prepare first index in list
+		int last = players.size() - 1; // prepare last index in list.
+
+		Player firstPlayer = players.get(zero); // get first Player all the time.
+		Player lastPlayer = players.get(last); // get last players all the time.
+
+		players.set(last, firstPlayer); // change index last to first player..
+		players.set(zero, lastPlayer); // cange index first to last player ..
 	}
 
 }
