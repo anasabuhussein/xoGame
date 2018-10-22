@@ -83,6 +83,30 @@ public class PlayerController {
 		LOGGER.info("Post Players ...");
 		return new ResponseEntity<>(facadeServices.getPlayerService().save(player), HttpStatus.OK);
 	}
+	
+	@PostMapping(value = ("/players/upload"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
+					MediaType.APPLICATION_XML_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE })
+	public ResponseEntity<?> setNewPlayer(@RequestParam(value="name") String name,
+			@RequestParam(value="pass") String pass,
+			@RequestParam(value="email") String email,
+			@RequestParam(value ="file") MultipartFile multipartFile) {
+		LOGGER.info("Post Players ...");
+		
+		Player player = new Player();
+		player.setPass(pass);
+		player.setName(name);
+		player.setEmail(email);
+		
+		try {
+			picPlayerStreamDaoImpService.writeToFolder(multipartFile, player);
+		} catch (IOException e) {
+			LOGGER.error(e.getMessage());
+		}
+//		facadeServices.getPlayerService().save(player)
+		return new ResponseEntity<>(player, HttpStatus.OK);
+	}
+	
 
 	@PutMapping(value = ("/players/{id}"), produces = { MediaType.APPLICATION_JSON_UTF8_VALUE,
 			MediaType.APPLICATION_XML_VALUE }, consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE,
